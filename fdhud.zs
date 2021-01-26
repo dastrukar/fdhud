@@ -149,7 +149,13 @@ class fdhud : BaseStatusBar
 
     void DrawFDFullScreen()
     {
-        DrawFDBarHealth(0, 168);
+        DrawFDBarHealth(0, -32);
+        DrawFDBarArmor(58, -32);
+        
+        DrawFDBarCurrentAmm(-47, -65);
+        DrawFDBarKeys(-60, -65);
+        DrawFDBarAmmo(-71, -32);
+        DrawFDBarWeapons(-111, -32);
     }
 
     void DrawFDBarCurrentAmm(int x, int y)
