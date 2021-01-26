@@ -155,7 +155,9 @@ class fdhud : BaseStatusBar
         DrawFDBarCurrentAmm(-47, -64);
         DrawFDBarKeys(-60, -64);
         DrawFDBarAmmo(-71, -32);
-        DrawFDBarWeapons(-111, -32);
+
+        Vector2 texsize = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
+        DrawFDBarWeapons(-71 - texsize.X, -32);
     }
 
     void DrawFDBarCurrentAmm(int x, int y)
