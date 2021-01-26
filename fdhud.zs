@@ -184,18 +184,24 @@ class fdhud : BaseStatusBar
             Vector2 starms_size = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
             DrawFDBarWeapons(fdbar_weapons_X_pos - starms_size.X, -32);
         }
+
+        // Draw Inventory bar
+        if (isInventoryBarVisible())
+        {
+            DrawInventoryBar(diparms, (0, 0), 7, DI_SCREEN_CENTER_BOTTOM, HX_SHADOW);
+        }
     }
 
     void DrawFDBarCurrentAmm(int x, int y)
     {
-        DrawImage("STAMM", (x, y), DI_ITEM_OFFSETS);
+        DrawImage("FDSTAMM", (x, y), DI_ITEM_OFFSETS);
         
         if (GetCurrentAmmo() != null) DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
     }
 
     void DrawFDBarHealth(int x, int y)
     {
-        DrawImage("STHP", (x, y), DI_ITEM_OFFSETS);
+        DrawImage("FDSTHP", (x, y), DI_ITEM_OFFSETS);
         
         DrawString(mHUDFont, FormatNumber(mHealthInterpolator.GetValue(), 3), (x+43, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         DrawImage("STTPRCNT", (x+43, y+3), DI_ITEM_OFFSETS);
@@ -203,7 +209,7 @@ class fdhud : BaseStatusBar
 
     void DrawFDBarArmor(int x, int y)
     {
-        DrawImage("STARMO", (x, y), DI_ITEM_OFFSETS);
+        DrawImage("FDSTARMO", (x, y), DI_ITEM_OFFSETS);
         
         DrawString(mHUDFont, FormatNumber(mArmorInterpolator.GetValue(), 3), (x+42, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         DrawImage("STTPRCNT", (x+42, y+3), DI_ITEM_OFFSETS);
@@ -211,7 +217,7 @@ class fdhud : BaseStatusBar
 
     void DrawFDBarKeys(int x, int y)
     {
-        DrawImage("STKEYS", (x, y), DI_ITEM_OFFSETS);
+        DrawImage("FDSTKEYS", (x, y), DI_ITEM_OFFSETS);
         
         bool locks[6];
         String image;
@@ -237,7 +243,7 @@ class fdhud : BaseStatusBar
 
     void DrawFDBarAmmo(int x, int y)
     {
-        DrawImage("STAAMM", (x, y), DI_ITEM_OFFSETS);
+        DrawImage("FDSTAAMM", (x, y), DI_ITEM_OFFSETS);
     
         DrawString(mIndexFont, FormatNumber(mClipInterpolator.GetValue(), 3), (x+39, y+5), DI_TEXT_ALIGN_RIGHT);
         DrawString(mIndexFont, FormatNumber(mMaxClipInterpolator.GetValue(), 3), (x+65, y+5), DI_TEXT_ALIGN_RIGHT);
