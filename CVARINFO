@@ -1,0 +1,2 @@
+user bool fdhud_onlycurrentweapon=false;
+user bool fdhud_hidearmsbar=false;
