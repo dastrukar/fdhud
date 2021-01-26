@@ -108,10 +108,10 @@ class fdhud : BaseStatusBar
     {
         DrawImage("STBAR", (0, 168), DI_ITEM_OFFSETS);
         
-        DrawFDBarCurrentAmm(0, 168);
         DrawFDBarHealth(47, 168);
         DrawFDBarArmor(179, 168);
-
+        
+        DrawFDBarCurrentAmm(0, 168);
         DrawFDBarKeys(236, 168);
         DrawFDBarAmmo(249, 168);
         
@@ -149,15 +149,41 @@ class fdhud : BaseStatusBar
 
     void DrawFDFullScreen()
     {
-        DrawFDBarHealth(0, -32);
-        DrawFDBarArmor(58, -32);
+        int fdbar_weapons_X_pos = -71;
         
-        DrawFDBarCurrentAmm(-47, -64);
-        DrawFDBarKeys(-60, -64);
-        DrawFDBarAmmo(-71, -32);
-
-        Vector2 texsize = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
-        DrawFDBarWeapons(-71 - texsize.X, -32);
+        // If true, stack Armor bar on top of Health bar
+        if (CVar.GetCVar("fdhud_stackarmorbar", CPlayer).GetBool())
+        {
+            DrawFDBarHealth(0, -32);
+            DrawFDBarArmor(0, -64);
+        }
+        else
+        {
+            DrawFDBarHealth(0, -32);
+            DrawFDBarArmor(58, -32);
+        }
+        
+        // If true, only show the current weapon ammo
+        if (CVar.GetCVar("fdhud_onlycurrentweapon", CPlayer).GetBool())
+        {
+            DrawFDBarCurrentAmm(-47, -32);
+            DrawFDBarKeys(-60, -32);
+            fdbar_weapons_X_pos = -60;
+        }
+        else
+        {
+            DrawFDBarCurrentAmm(-47, -64);
+            DrawFDBarKeys(-60, -64);
+            DrawFDBarAmmo(-71, -32);
+            fdbar_weapons_X_pos = -71;
+        }
+        
+        // If true, hide the Arms bar
+        if (!CVar.GetCVar("fdhud_hidearmsbar", CPlayer).GetBool())
+        {
+            Vector2 starms_size = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
+            DrawFDBarWeapons(fdbar_weapons_X_pos - starms_size.X, -32);
+        }
     }
 
     void DrawFDBarCurrentAmm(int x, int y)
