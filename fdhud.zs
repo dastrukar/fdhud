@@ -1,4 +1,4 @@
-class fdhud : DoomStatusBar
+class fdhud : BaseStatusBar
 {
     DynamicValueInterpolator mAmmoInterpolator;
     DynamicValueInterpolator mHealthInterpolator;
@@ -64,7 +64,7 @@ class fdhud : DoomStatusBar
         else if (state == HUD_Fullscreen)
         {
             BeginHUD();
-            DrawFullScreenStuff();
+            DrawFDFullScreen();
         }
     }
 
@@ -79,7 +79,7 @@ class fdhud : DoomStatusBar
     override void Tick()
     {
         Super.Tick();
-        mAmmoInterpolator.Update(GetCurrentAmmo().Amount);
+        if (GetCurrentAmmo() != null) {mAmmoInterpolator.Update(GetCurrentAmmo().Amount);}
         mHealthInterpolator.Update(CPlayer.health);
         mArmorInterpolator.Update(GetArmorAmount());
 
@@ -107,7 +107,6 @@ class fdhud : DoomStatusBar
     void DrawMainFDBar(double TicFrac)
     {
         DrawImage("STBAR", (0, 168), DI_ITEM_OFFSETS);
-        
         
         DrawFDBarCurrentAmm(0, 168);
         DrawFDBarHealth(47, 168);
@@ -146,6 +145,11 @@ class fdhud : DoomStatusBar
         {
             DrawInventoryBar(diparms, (48, 169), 7, DI_ITEM_LEFT_TOP);
         }
+    }
+
+    void DrawFDFullScreen()
+    {
+        DrawFDBarHealth(0, 168);
     }
 
     void DrawFDBarCurrentAmm(int x, int y)
