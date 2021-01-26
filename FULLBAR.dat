@@ -1,0 +1,46 @@
+
+statusbar fullscreen, fullscreenoffsets // ZDoom HUD
+{
+	//health
+	drawimage "FLDHEALT", 29, -15, center;
+	drawnumber 3, FDFONT_DOOM2, untranslated, health, interpolate(4096), 43, -29;
+	drawimage "D2PRCNT", 43, -29;
+		
+	drawimage "FLDARMOR", 87, -15, center;
+	Alpha 0.4
+	{
+		drawimage armoricon, 87, -21, center, 58, 16, forcescale;
+	}
+	drawnumber 3, FDFONT_DOOM2, untranslated, armor, interpolate(4096), 101, -29;
+	drawimage "D2PRCNT", 101, -29;
+		
+	drawimage "FLDAMMO", -23, -48, center;
+	drawimage "FLDKEYS", -52, -47, center;
+	Alpha 0.4
+	{
+		drawimage ammoicon1, -23, -54, center, 32, 14, forcescale;
+	}
+	drawnumber 3, FDFONT_DOOM2, untranslated, ammo1, interpolate(4096), -2, -61;
+	
+	drawimage "FLDCAPS", -36, -15, center;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammo(Clip), interpolate(4096), -33, -27;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammo(Shell), interpolate(4096), -33, -21;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammo(RocketAmmo), interpolate(4096), -33, -15;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammo(Cell), interpolate(4096), -33, -9;
+
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammocapacity(Clip), interpolate(1), -7, -27;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammocapacity(Shell), interpolate(1), -7, -21;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammocapacity(RocketAmmo), interpolate(1), -7, -15;
+	drawnumber 3, FDFONT_SDOOM2, untranslated, ammocapacity(Cell), interpolate(1), -7, -9;
+		
+	drawswitchableimage keyslot 2 && 5, "nullimage", "STKEYS0", "STKEYS3", "STKEYS6", -56, -60;
+	drawswitchableimage keyslot 3 && 6, "nullimage", "STKEYS1", "STKEYS4", "STKEYS7", -56, -50;
+	drawswitchableimage keyslot 1 && 4, "nullimage", "STKEYS2", "STKEYS5", "STKEYS8", -56, -40;
+	
+	inventorybarnotvisible
+	{
+		drawselectedinventory centerbottom, alwaysshowcounter, FDFONT_DOOM2, -14, -71, -26, -86, untranslated;
+	}
+		
+	drawinventorybar Doom, translucent, 7, FDFONT_SDOOM2, 70, 170;
+}
