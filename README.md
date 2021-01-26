@@ -3,7 +3,7 @@
 
 ## What is this?
 FDHUD is a GZDoom mod that attempts to emulate the HUDs used in Final Doomer Plus.
-Designed to work with most STBAR textures, *though I haven't really tested it out yet*.
+Designed to work with most STBAR textures, *though I haven't really tested it out with other STBAR textures yet.*
 
 *Funnily enough, doesn't actually work with Final Doomer Plus.*
 
