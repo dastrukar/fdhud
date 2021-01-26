@@ -2,7 +2,7 @@ OptionMenu "FDHUDOptions"
 {
     Title "FDHUD Options"
     
-    StaticText "Changes how the HUD looks."
+    StaticText "Changes how the FullScreen HUD looks."
     Option "Only show current weapon ammo", "fdhud_onlycurrentweapon", "OnOff"
     Option "Hide Arms bar", "fdhud_hidearmsbar", "OnOff"
 }
