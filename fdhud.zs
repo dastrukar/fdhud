@@ -35,15 +35,15 @@ class fdhud : BaseStatusBar
         mAmountFont = HUDFont.Create("INDEXFONT");
         diparms     = InventoryBarState.Create();
 
-        mAmmoInterpolator    = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
-        mHealthInterpolator  = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
-        mArmorInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
+        mAmmoInterpolator    = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mHealthInterpolator  = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mArmorInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
 
         // Ammo
-        mClipInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
-        mShellInterpolator  = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
-        mRocketInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
-        mPlasmaInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
+        mClipInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mShellInterpolator  = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mRocketInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mPlasmaInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
 
         // Max Ammo
         mMaxClipInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 4);
