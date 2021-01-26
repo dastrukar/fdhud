@@ -152,8 +152,8 @@ class fdhud : BaseStatusBar
         DrawFDBarHealth(0, -32);
         DrawFDBarArmor(58, -32);
         
-        DrawFDBarCurrentAmm(-47, -65);
-        DrawFDBarKeys(-60, -65);
+        DrawFDBarCurrentAmm(-47, -64);
+        DrawFDBarKeys(-60, -64);
         DrawFDBarAmmo(-71, -32);
         DrawFDBarWeapons(-111, -32);
     }
