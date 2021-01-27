@@ -5,3 +5,5 @@ user bool fdhud_stackarmorbar=false;
 user float fdhud_hpiconalpha=0.25;
 user float fdhud_armoriconalpha=0.25;
 user float fdhud_ammoiconalpha=0.25;
+
+user bool fdhud_swapaltammo=false;
