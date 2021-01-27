@@ -1,3 +1,7 @@
 user bool fdhud_onlycurrentweapon=false;
 user bool fdhud_hidearmsbar=false;
 user bool fdhud_stackarmorbar=false;
+
+user bool fdhud_hidehpicon=false;
+user bool fdhud_hidearmoicon=false;
+user bool fdhud_hideammoicon=false;
