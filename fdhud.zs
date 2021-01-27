@@ -196,12 +196,32 @@ class fdhud : BaseStatusBar
     {
         DrawImage("FDSTAMM", (x, y), DI_ITEM_OFFSETS);
         
-        if (GetCurrentAmmo() != null) DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+        if (GetCurrentAmmo() != null) { 
+            // Draw icon
+            let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
+            let adjustment = GetTextureOffsetCorrection(ammotype);
+            
+            DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
+            
+            DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+        }
     }
 
     void DrawFDBarHealth(int x, int y)
     {
         DrawImage("FDSTHP", (x, y), DI_ITEM_OFFSETS);
+        
+        // Draw icon
+        let berserk = CPlayer.mo.FindInventory("PowerStrength");
+        
+        // Get icon center
+        let hpTexID = TexMan.CheckForTexture(berserk? "PSTRA0" : "MEDIA0");
+        
+        let adjustment = GetTextureOffsetCorrection(hpTexID);
+       
+        DrawImage(berserk? "PSTRA0" : "MEDIA0", (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
+        //DrawImage(berserk? "PSTRA0" : "MEDIA0", (x+29, y+21), DI_ITEM_OFFSETS, 0.25);
+        
         
         DrawString(mHUDFont, FormatNumber(mHealthInterpolator.GetValue(), 3), (x+43, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         DrawImage("STTPRCNT", (x+43, y+3), DI_ITEM_OFFSETS);
@@ -210,6 +230,16 @@ class fdhud : BaseStatusBar
     void DrawFDBarArmor(int x, int y)
     {
         DrawImage("FDSTARMO", (x, y), DI_ITEM_OFFSETS);
+        
+        // Draw icon
+        let armor = CPlayer.mo.FindInventory("BasicArmor");
+        if (armor != null && armor.Amount > 0) 
+        {
+            let armorTexID = GetInventoryIcon(armor, 0);
+            let adjustment = GetTextureOffsetCorrection(armorTexID);
+
+            DrawInventoryIcon(armor, (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
+        }
         
         DrawString(mHUDFont, FormatNumber(mArmorInterpolator.GetValue(), 3), (x+42, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         DrawImage("STTPRCNT", (x+42, y+3), DI_ITEM_OFFSETS);
@@ -267,5 +297,14 @@ class fdhud : BaseStatusBar
         DrawImage(CPlayer.HasWeaponsInSlot(5)? "STYSNUM5" : "STGNUM5", (x+7, y+14), DI_ITEM_OFFSETS);
         DrawImage(CPlayer.HasWeaponsInSlot(6)? "STYSNUM6" : "STGNUM6", (x+19, y+14), DI_ITEM_OFFSETS);
         DrawImage(CPlayer.HasWeaponsInSlot(7)? "STYSNUM7" : "STGNUM7", (x+31, y+14), DI_ITEM_OFFSETS);
+    }
+
+    
+    Vector2 GetTextureOffsetCorrection(TextureID TexID)
+    {
+        let offset = TexMan.GetScaledOffset(TexID);
+        let size = TexMan.GetScaledSize(TexID);
+        
+        return (offset.X - int(size.X / 2), offset.Y - size.Y);
     }
 }
