@@ -8,9 +8,14 @@ OptionMenu "FDHUDOptions"
     StaticText " "
     Option "Only show current weapon ammo", "fdhud_onlycurrentweapon", "OnOff"
     Option "Hide Arms bar", "fdhud_hidearmsbar", "OnOff"
+    StaticText " "
+    Option "Hide Health icon", "fdhud_hidehpicon", "OnOff"
+    Option "Hide Armor icon", "fdhud_hidearmoicon", "OnOff"
+    Option "Hide Ammo icon", "fdhud_hideammoicon", "OnOff"
 }
 
 AddOptionMenu "OptionsMenu"
 {
+    StaticText " "
     Submenu "FDHUD Options", "FDHUDOptions"
 }
