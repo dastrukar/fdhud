@@ -166,14 +166,14 @@ class fdhud : BaseStatusBar
         // If true, only show the current weapon ammo
         if (CVar.GetCVar("fdhud_onlycurrentweapon", CPlayer).GetBool())
         {
-            DrawFDBarCurrentAmm(-47, -32);
-            DrawFDBarKeys(-60, -32);
+            DrawFDBarCurrentAmm(-48, -32);
+            DrawFDBarKeys(-61, -32);
             fdbar_weapons_X_pos = -60;
         }
         else
         {
-            DrawFDBarCurrentAmm(-47, -64);
-            DrawFDBarKeys(-60, -64);
+            DrawFDBarCurrentAmm(-48, -64);
+            DrawFDBarKeys(-61, -64);
             DrawFDBarAmmo(-71, -32);
             fdbar_weapons_X_pos = -71;
         }
