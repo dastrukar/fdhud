@@ -16,6 +16,7 @@ OptionMenu "FDHUDOptions"
     Slider "Health icon alpha", "fdhud_hpiconalpha", 0.00, 1.00, 0.05, 2
     Slider "Armor icon alpha", "fdhud_armoriconalpha", 0.00, 1.00, 0.05, 2
     Slider "Ammo icon alpha", "fdhud_ammoiconalpha", 0.00, 1.00, 0.05, 2
+    Option "Swap Alt. Ammo", "fdhud_swapaltammo", "OnOff"
 }
 
 AddOptionMenu "OptionsMenu"
