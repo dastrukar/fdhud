@@ -13,9 +13,9 @@ OptionMenu "FDHUDOptions"
     StaticText " "
     StaticText "The following settings affect both the FullScreen HUD and Statusbar"
     StaticText " "
-    Option "Hide Health icon", "fdhud_hidehpicon", "OnOff"
-    Option "Hide Armor icon", "fdhud_hidearmoicon", "OnOff"
-    Option "Hide Ammo icon", "fdhud_hideammoicon", "OnOff"
+    Slider "Health icon alpha", "fdhud_hidehpicon", 0.00, 1.00, 0.05
+    Slider "Armor icon alpha", "fdhud_hidearmoicon", 0.00, 1.00, 0.05
+    Slider "Ammo icon alpha", "fdhud_hideammoicon", 0.00, 1.00, 0.05
 }
 
 AddOptionMenu "OptionsMenu"
