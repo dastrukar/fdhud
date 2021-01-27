@@ -1,6 +1,7 @@
 class fdhud : BaseStatusBar
 {
     DynamicValueInterpolator mAmmoInterpolator;
+    DynamicValueInterpolator mAltAmmoInterpolator;
     DynamicValueInterpolator mHealthInterpolator;
     DynamicValueInterpolator mArmorInterpolator;
 
@@ -33,9 +34,11 @@ class fdhud : BaseStatusBar
         fnt = "INDEXFONT_DOOM";
         mIndexFont  = HUDFont.Create(fnt, fnt.GetCharWidth("0"), Mono_CellLeft);
         mAmountFont = HUDFont.Create("INDEXFONT");
+        
         diparms     = InventoryBarState.Create();
 
         mAmmoInterpolator    = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
+        mAltAmmoInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
         mHealthInterpolator  = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
         mArmorInterpolator   = DynamicValueInterpolator.Create(0, 0.25, 1, 4096);
 
@@ -72,14 +75,33 @@ class fdhud : BaseStatusBar
     {
         Super.NewGame();
         mAmmoInterpolator.Reset(0);
+        mAltAmmoInterpolator.Reset(0);
         mHealthInterpolator.Reset(0);
         mArmorInterpolator.Reset(0);
+
+        mClipInterpolator.Reset(0);
+        mMaxClipInterpolator.Reset(0);
+
+        mShellInterpolator.Reset(0);
+        mMaxShellInterpolator.Reset(0);
+
+        mRocketInterpolator.Reset(0);
+        mMaxRocketInterpolator.Reset(0);
+
+        mPlasmaInterpolator.Reset(0);
+        mMaxPlasmaInterpolator.Reset(0);
     }
 
     override void Tick()
     {
         Super.Tick();
-        if (GetCurrentAmmo() != null) {mAmmoInterpolator.Update(GetCurrentAmmo().Amount);}
+        
+        Inventory ammotype1, ammotype2;
+        [ammotype1, ammotype2] = GetCurrentAmmo();
+
+        if (ammotype1 != null) { mAmmoInterpolator.Update(ammotype1.Amount); }
+        if (ammotype2 != null) { mAltAmmoInterpolator.Update(ammotype2.Amount); }
+
         mHealthInterpolator.Update(CPlayer.health);
         mArmorInterpolator.Update(GetArmorAmount());
 
@@ -196,15 +218,19 @@ class fdhud : BaseStatusBar
     {
         DrawImage("FDSTAMM", (x, y), DI_ITEM_OFFSETS);
         
-        if (GetCurrentAmmo() != null) {
+        Inventory ammotype1, ammotype2;
+        [ammotype1, ammotype2] = GetCurrentAmmo();
+        
+        if (ammotype1 != null) {
             // Draw icon
             let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
             let adjustment = GetTextureOffsetCorrection(ammotype);
             let alpha = CVar.GetCVar("fdhud_ammoiconalpha", CPlayer).GetFloat();
             
             DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
-
+            
             DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+            if (ammotype2 != null) { DrawString(mIndexFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
         }
     }
 
