@@ -229,8 +229,21 @@ class fdhud : BaseStatusBar
             
             DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
             
-            DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
-            if (ammotype2 != null) { DrawString(mIndexFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
+            if (CVar.GetCVar("fdhud_swapaltammo", CPlayer).GetBool())
+            {
+                if (ammotype2 != null)
+                {
+                    DrawString(mHUDFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+                    DrawString(mIndexFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+                }
+                else { DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
+            }
+            else
+            {
+                DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+                if (ammotype2 != null) { DrawString(mIndexFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
+            }
+                
         }
     }
 
