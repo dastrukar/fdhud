@@ -197,14 +197,12 @@ class fdhud : BaseStatusBar
         DrawImage("FDSTAMM", (x, y), DI_ITEM_OFFSETS);
         
         if (GetCurrentAmmo() != null) {
-            if (!CVar.GetCVar("fdhud_hideammoicon", CPlayer).GetBool())
-            {
-                // Draw icon
-                let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
-                let adjustment = GetTextureOffsetCorrection(ammotype);
-                
-                DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
-            }
+            // Draw icon
+            let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
+            let adjustment = GetTextureOffsetCorrection(ammotype);
+            let alpha = CVar.GetCVar("fdhud_ammoiconalpha", CPlayer).GetFloat();
+            
+            DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
 
             DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         }
@@ -218,14 +216,12 @@ class fdhud : BaseStatusBar
         let berserk = CPlayer.mo.FindInventory("PowerStrength");
         
         // Get icon center
-        if (!CVar.GetCVar("fdhud_hidehpicon", CPlayer).GetBool())
-        {
-            let hpTexID = TexMan.CheckForTexture(berserk? "PSTRA0" : "MEDIA0");
-            
-            let adjustment = GetTextureOffsetCorrection(hpTexID);
-             
-            DrawImage(berserk? "PSTRA0" : "MEDIA0", (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
-        }
+        let hpTexID = TexMan.CheckForTexture(berserk? "PSTRA0" : "MEDIA0");
+        let adjustment = GetTextureOffsetCorrection(hpTexID);
+        let alpha = CVar.GetCVar("fdhud_hpiconalpha", CPlayer).GetFloat();
+         
+        DrawImage(berserk? "PSTRA0" : "MEDIA0", (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
+        
         
         DrawString(mHUDFont, FormatNumber(mHealthInterpolator.GetValue(), 3), (x+43, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
         DrawImage("STTPRCNT", (x+43, y+3), DI_ITEM_OFFSETS);
@@ -237,12 +233,13 @@ class fdhud : BaseStatusBar
         
         // Draw icon
         let armor = CPlayer.mo.FindInventory("BasicArmor");
-        if (armor != null && armor.Amount > 0 && !CVar.GetCVar("fdhud_hidearmoicon", CPlayer).GetBool()) 
+        if (armor != null && armor.Amount > 0)
         {
             let armorTexID = GetInventoryIcon(armor, 0);
             let adjustment = GetTextureOffsetCorrection(armorTexID);
+            let alpha = CVar.GetCVar("fdhud_armoriconalpha", CPlayer).GetFloat();
 
-            DrawInventoryIcon(armor, (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, 0.25);
+            DrawInventoryIcon(armor, (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
         }
         
         DrawString(mHUDFont, FormatNumber(mArmorInterpolator.GetValue(), 3), (x+42, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
