@@ -248,7 +248,7 @@ class fdhud : BaseStatusBar
                     DrawString(mHUDFont, ammotype2_string, (x+24, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
                     DrawString(mIndexFont, ammotype1_string, (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
                 }
-                else { DrawString(mHUDFont, ammotype1_string, (x+44, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW); }
+                else { DrawString(mHUDFont, ammotype1_string, (x+24, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW); }
             }
             else
             {
