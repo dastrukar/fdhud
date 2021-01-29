@@ -8,3 +8,4 @@ user float fdhud_ammoiconalpha=0.25;
 
 user bool fdhud_swapaltammo=false;
 user bool fdhud_hidepercent=false;
+user bool fdhud_centervalue=false;
