@@ -28,7 +28,7 @@ class fdhud : BaseStatusBar
         Super.Init();
         SetSize(32, 320, 200);
 
-        Font fnt = "HUDFONT_DOOM";
+        Font fnt = "STATUSFONT";
         mHUDFont = HUDFont.Create(fnt, fnt.GetCharWidth("0"), Mono_CellLeft, 1, 1);
         
         fnt = "INDEXFONT_DOOM";
@@ -222,26 +222,38 @@ class fdhud : BaseStatusBar
         [ammotype1, ammotype2] = GetCurrentAmmo();
         
         if (ammotype1 != null) {
+            // Get ammo type value
+            let ammotype1_value = mAmmoInterpolator.GetValue();
+            let ammotype2_value = mAltAmmoInterpolator.GetValue();
+            
+            // Get format_value
+            let format_value1 = GetFormatAmount(ammotype1_value);
+            let format_value2 = GetFormatAmount(ammotype2_value);
+            
             // Draw icon
             let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
             let adjustment = GetTextureOffsetCorrection(ammotype);
             let alpha = CVar.GetCVar("fdhud_ammoiconalpha", CPlayer).GetFloat();
             
             DrawInventoryIcon(GetCurrentAmmo(), (x+24+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
+
+            // Format ammo
+            string ammotype1_string = FormatNumber(ammotype1_value, format_value1);
+            string ammotype2_string = FormatNumber(ammotype2_value, format_value2);
             
             if (CVar.GetCVar("fdhud_swapaltammo", CPlayer).GetBool())
             {
                 if (ammotype2 != null)
                 {
-                    DrawString(mHUDFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
-                    DrawString(mIndexFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
+                    DrawString(mHUDFont, ammotype2_string, (x+24, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
+                    DrawString(mIndexFont, ammotype1_string, (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
                 }
-                else { DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
+                else { DrawString(mHUDFont, ammotype1_string, (x+44, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW); }
             }
             else
             {
-                DrawString(mHUDFont, FormatNumber(mAmmoInterpolator.GetValue(), 3), (x+44, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
-                if (ammotype2 != null) { DrawString(mIndexFont, FormatNumber(mAltAmmoInterpolator.GetValue(), 3), (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
+                DrawString(mHUDFont, ammotype1_string, (x+24, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
+                if (ammotype2 != null) { DrawString(mIndexFont, ammotype2_string, (x+46, y+16), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW); }
             }
                 
         }
@@ -250,6 +262,12 @@ class fdhud : BaseStatusBar
     void DrawFDBarHealth(int x, int y)
     {
         DrawImage("FDSTHP", (x, y), DI_ITEM_OFFSETS);
+        
+        // Get Health value
+        let health = mHealthInterpolator.GetValue();
+
+        // Get text_align
+        let format_value = GetFormatAmount(health);
         
         // Draw icon
         let berserk = CPlayer.mo.FindInventory("PowerStrength");
@@ -261,14 +279,25 @@ class fdhud : BaseStatusBar
          
         DrawImage(berserk? "PSTRA0" : "MEDIA0", (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
         
+        // Add percent to health? Also turn it into a string
+        string hp;
+
+        hp = FormatNumber(health, format_value);
+        if (!CVar.GetCVar("fdhud_hidepercent", CPlayer).GetBool()) { hp = String.Format("%s%%", hp); }
         
-        DrawString(mHUDFont, FormatNumber(mHealthInterpolator.GetValue(), 3), (x+43, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
-        DrawImage("STTPRCNT", (x+43, y+3), DI_ITEM_OFFSETS);
+        // Draw Health value
+        DrawString(mHUDFont, hp, (x+29, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
     }
 
     void DrawFDBarArmor(int x, int y)
     {
         DrawImage("FDSTARMO", (x, y), DI_ITEM_OFFSETS);
+        
+        // Get Armor value
+        let armor_value = mArmorInterpolator.GetValue();
+        
+        // Get format_value
+        let format_value = GetFormatAmount(armor_value);
         
         // Draw icon
         let armor = CPlayer.mo.FindInventory("BasicArmor");
@@ -281,8 +310,11 @@ class fdhud : BaseStatusBar
             DrawInventoryIcon(armor, (x+29+adjustment.X, y+21+adjustment.Y), DI_ITEM_OFFSETS, alpha);
         }
         
-        DrawString(mHUDFont, FormatNumber(mArmorInterpolator.GetValue(), 3), (x+42, y+3), DI_TEXT_ALIGN_RIGHT|DI_NOSHADOW);
-        DrawImage("STTPRCNT", (x+42, y+3), DI_ITEM_OFFSETS);
+        // Add percent?
+        string armor_string = FormatNumber(armor_value, format_value);
+        if (!CVar.GetCvar("fdhud_hidepercent", CPlayer).GetBool()) { armor_string = String.Format("%s%%", armor_string); }
+        
+        DrawString(mHUDFont, armor_string, (x+29, y+3), DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
     }
 
     void DrawFDBarKeys(int x, int y)
@@ -346,5 +378,22 @@ class fdhud : BaseStatusBar
         let size = TexMan.GetScaledSize(TexID);
         
         return (offset.X - int(size.X / 2), offset.Y - size.Y);
+    }
+    
+    int GetFormatAmount(int value)
+    {
+        if (CVar.GetCVar("fdhud_centervalue", CPlayer).GetBool())
+        {
+            int length;
+            do
+            {
+                value /= 10;
+                length++;
+            }
+            while (value >= 1 && length < 3);
+
+            return length;
+        }
+        else { return 3; }
     }
 }
