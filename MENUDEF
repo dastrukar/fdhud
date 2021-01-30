@@ -5,6 +5,7 @@ OptionMenu "FDHUDOptions"
     StaticText "Changes how the FullScreen HUD looks."
     StaticText " "
     Option "Stack Armor bar", "fdhud_stackarmorbar", "OnOff"
+    Slider "Inv. BG alpha", "fdhud_inventoryalpha", 0.00, 1.00, 0.05, 2
     StaticText " "
     StaticText "May help with mod compatibility"
     Option "Only show current weapon ammo", "fdhud_onlycurrentweapon", "OnOff"
@@ -16,6 +17,7 @@ OptionMenu "FDHUDOptions"
     Slider "Health icon alpha", "fdhud_hpiconalpha", 0.00, 1.00, 0.05, 2
     Slider "Armor icon alpha", "fdhud_armoriconalpha", 0.00, 1.00, 0.05, 2
     Slider "Ammo icon alpha", "fdhud_ammoiconalpha", 0.00, 1.00, 0.05, 2
+    Slider "Inv. icon alpha", "fdhud_inviconalpha", 0.00, 1.00, 0.05, 2
     Option "Swap Alt. Ammo", "fdhud_swapaltammo", "OnOff"
     Option "Hide Percent", "fdhud_hidepercent", "OnOff"
     Option "Center Numbers", "fdhud_centervalue", "OnOff"
