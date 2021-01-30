@@ -1,10 +1,12 @@
 user bool fdhud_onlycurrentweapon=false;
 user bool fdhud_hidearmsbar=false;
 user bool fdhud_stackarmorbar=false;
+user float fdhud_inventoryalpha=0.25;
 
 user float fdhud_hpiconalpha=0.25;
 user float fdhud_armoriconalpha=0.25;
 user float fdhud_ammoiconalpha=0.25;
+user float fdhud_inviconalpha=1.00;
 
 user bool fdhud_swapaltammo=false;
 user bool fdhud_hidepercent=false;
