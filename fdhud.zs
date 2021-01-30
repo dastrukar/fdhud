@@ -153,7 +153,7 @@ class fdhud : BaseStatusBar
         
         if (CPlayer.mo.InvSel != null && !Level.NoInventoryBar)
         {
-            DrawInventoryIcon(CPlayer.mo.InvSel, (160, 198));
+            DrawInventoryIcon(CPlayer.mo.InvSel, (160, 198);
             if (CPlayer.mo.InvSel.Amount > 1)
             {
                 DrawString(mAmountFont, FormatNumber(CPlayer.mo.InvSel.Amount), (175, 198-mIndexFont.mFont.GetHeight()), DI_TEXT_ALIGN_RIGHT, Font.CR_GOLD);
@@ -172,6 +172,7 @@ class fdhud : BaseStatusBar
     void DrawFDFullScreen()
     {
         int fdbar_weapons_X_pos = -71;
+        int fdbar_weapons_Y_pos = -64;
         
         // If true, stack Armor bar on top of Health bar
         if (CVar.GetCVar("fdhud_stackarmorbar", CPlayer).GetBool())
@@ -191,6 +192,7 @@ class fdhud : BaseStatusBar
             DrawFDBarCurrentAmm(-48, -32);
             DrawFDBarKeys(-61, -32);
             fdbar_weapons_X_pos = -60;
+            fdbar_weapons_Y_pos = -32;
         }
         else
         {
@@ -198,6 +200,7 @@ class fdhud : BaseStatusBar
             DrawFDBarKeys(-61, -64);
             DrawFDBarAmmo(-71, -32);
             fdbar_weapons_X_pos = -71;
+            fdbar_weapons_Y_pos = -64;
         }
         
         // If true, hide the Arms bar
@@ -211,6 +214,12 @@ class fdhud : BaseStatusBar
         if (isInventoryBarVisible())
         {
             DrawInventoryBar(diparms, (0, 0), 7, DI_SCREEN_CENTER_BOTTOM, HX_SHADOW);
+        }
+        else
+        {
+            // Get position
+            Vector2 boxpos = (-diparms.boxsize.X, -diparms.boxsize.Y + fdbar_weapons_Y_pos);
+            DrawFDInventory(diparms, boxpos);
         }
     }
 
@@ -369,6 +378,23 @@ class fdhud : BaseStatusBar
         DrawImage(CPlayer.HasWeaponsInSlot(5)? "STYSNUM5" : "STGNUM5", (x+7, y+14), DI_ITEM_OFFSETS);
         DrawImage(CPlayer.HasWeaponsInSlot(6)? "STYSNUM6" : "STGNUM6", (x+19, y+14), DI_ITEM_OFFSETS);
         DrawImage(CPlayer.HasWeaponsInSlot(7)? "STYSNUM7" : "STGNUM7", (x+31, y+14), DI_ITEM_OFFSETS);
+    }
+
+    void DrawFDInventory(InventoryBarState parms, Vector2 pos)
+    {
+        if (CPlayer.mo.InvSel != null && !Level.NoInventoryBar)
+        {
+            DrawTexture(parms.box, pos, DI_ITEM_OFFSETS, CVar.GetCVar("fdhud_inventoryalpha", CPlayer).GetFloat());
+
+            Vector2 itempos = pos + parms.boxsize / 2;
+            Vector2 textpos = pos + parms.boxsize - (1, 1 + parms.amountfont.mFont.GetHeight());
+
+            let item = CPlayer.mo.InvSel;
+            
+            // Draw Inventory icon
+            DrawInventoryIcon(item, itempos, DI_ITEM_CENTER, CVar.GetCVar("fdhud_inviconalpha", CPlayer).GetFloat());
+            if (item.Amount > 1) { DrawString(parms.amountfont, FormatNumber(item.Amount, 0, 5), textpos, DI_TEXT_ALIGN_RIGHT, parms.cr, parms.itemalpha); }
+        }
     }
 
     
