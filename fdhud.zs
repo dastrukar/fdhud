@@ -421,7 +421,7 @@ class fdhud : BaseStatusBar
         {
             DrawTexture(parms.box, pos, DI_ITEM_OFFSETS, CVar.GetCVar("fdhud_inventoryalpha", CPlayer).GetFloat());
 
-            Vector2 itempos = pos + parms.boxsize / 2;
+            Vector2 itempos = pos + parms.boxsize * 0.5;
             Vector2 textpos = pos + parms.boxsize - (1, 1 + parms.amountfont.mFont.GetHeight());
 
             let item = CPlayer.mo.InvSel;
@@ -438,7 +438,7 @@ class fdhud : BaseStatusBar
         let offset = TexMan.GetScaledOffset(TexID);
         let size = TexMan.GetScaledSize(TexID);
         
-        return (offset.X - int(size.X / 2), offset.Y - size.Y);
+        return (offset.X - int(size.X * 0.5), offset.Y - size.Y);
     }
     
     int GetFormatAmount(int value)
@@ -448,7 +448,7 @@ class fdhud : BaseStatusBar
             int length;
             do
             {
-                value /= 10;
+                value *= 0.1;
                 length++;
             }
             while (value >= 1 && length < 3);
