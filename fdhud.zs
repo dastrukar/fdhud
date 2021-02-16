@@ -374,6 +374,7 @@ class fdhud : BaseStatusBar
         let l = 39;
         let r = 65;
         
+        // For convience
         let clip_pos  = pos + (l, 5);
         let mclip_pos = pos + (r, 5);
         
@@ -433,14 +434,17 @@ class fdhud : BaseStatusBar
     }
 
     
+    // Returns a value used for adjusting sprites, if the sprite has an offset that makes it not centered
     Vector2 GetTextureOffsetCorrection(TextureID TexID)
     {
         let offset = TexMan.GetScaledOffset(TexID);
         let size = TexMan.GetScaledSize(TexID);
         
+        // Compare the offset with the bottom center of the sprite, and return the difference
         return (offset.X - int(size.X * 0.5), offset.Y - size.Y);
     }
     
+    // Returns the length of the given value, used for FormatNumber
     int GetFormatAmount(int value)
     {
         if (CVar.GetCVar("fdhud_centervalue", CPlayer).GetBool())
