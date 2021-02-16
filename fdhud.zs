@@ -422,7 +422,7 @@ class fdhud : BaseStatusBar
         {
             DrawTexture(parms.box, pos, DI_ITEM_OFFSETS, CVar.GetCVar("fdhud_inventoryalpha", CPlayer).GetFloat());
 
-            Vector2 itempos = pos + parms.boxsize * 0.5;
+            Vector2 itempos = pos + parms.boxsize / 2;
             Vector2 textpos = pos + parms.boxsize - (1, 1 + parms.amountfont.mFont.GetHeight());
 
             let item = CPlayer.mo.InvSel;
@@ -441,7 +441,7 @@ class fdhud : BaseStatusBar
         let size = TexMan.GetScaledSize(TexID);
         
         // Compare the offset with the bottom center of the sprite, and return the difference
-        return (offset.X - int(size.X * 0.5), offset.Y - size.Y);
+        return (offset.X - int(size.X / 2), offset.Y - size.Y);
     }
     
     // Returns the length of the given value, used for FormatNumber
@@ -452,7 +452,7 @@ class fdhud : BaseStatusBar
             int length;
             do
             {
-                value *= 0.1;
+                value /= 10;
                 length++;
             }
             while (value >= 1 && length < 3);
