@@ -1,4 +1,4 @@
 GameInfo
 {
-    StatusBarClass = "fdhud"
+    StatusBarClass = "FDHud"
 }

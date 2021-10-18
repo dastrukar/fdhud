@@ -1,4 +1,6 @@
-class fdhud : BaseStatusBar
+version "4.0"
+
+class FDHud : BaseStatusBar
 {
     DynamicValueInterpolator mAmmoInterpolator;
     DynamicValueInterpolator mAltAmmoInterpolator;
@@ -237,15 +239,14 @@ class fdhud : BaseStatusBar
             
             // Draw icon
             let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
-            let adjustment = GetTextureOffsetCorrection(ammotype);
             let alpha = CVar.GetCVar("fdhud_ammoiconalpha", CPlayer).GetFloat();
             
             // Define positions
-            let icon_pos = pos + adjustment + (24, 21);
+            let icon_pos = pos + (24, 21);
             let ammo1_pos = pos + (24, 3);
             let ammo2_pos = pos + (46, 16);
             
-            DrawInventoryIcon(GetCurrentAmmo(), icon_pos, DI_ITEM_OFFSETS, alpha);
+            DrawInventoryIcon(GetCurrentAmmo(), icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
             
             // Format ammo
             string ammo1_string;
@@ -279,16 +280,13 @@ class fdhud : BaseStatusBar
         // Draw icon
         let berserk = CPlayer.mo.FindInventory("PowerStrength");
         
-        // Get icon center
-        let hpTexID = TexMan.CheckForTexture(berserk? "PSTRA0" : "MEDIA0");
-        let adjustment = GetTextureOffsetCorrection(hpTexID);
         let alpha = CVar.GetCVar("fdhud_hpiconalpha", CPlayer).GetFloat();
 
         // Define positions
-        let icon_pos = pos + adjustment + (29, 21);
+        let icon_pos = pos + (29, 21);
         let text_pos = pos + (29, 3);
          
-        DrawImage(berserk? "PSTRA0" : "MEDIA0", icon_pos, DI_ITEM_OFFSETS, alpha);
+        DrawImage(berserk? "PSTRA0" : "MEDIA0", icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
         
         // Add percent to health? Also turn it into a string
         string hp;
@@ -314,14 +312,12 @@ class fdhud : BaseStatusBar
         let armor = CPlayer.mo.FindInventory("BasicArmor");
         if (armor != null && armor.Amount > 0)
         {
-            let armorTexID = GetInventoryIcon(armor, 0);
-            let adjustment = GetTextureOffsetCorrection(armorTexID);
             let alpha = CVar.GetCVar("fdhud_armoriconalpha", CPlayer).GetFloat();
             
             // Set position
-            let icon_pos = pos + adjustment + (29, 21); 
+            let icon_pos = pos + (29, 21);
 
-            DrawInventoryIcon(armor, icon_pos, DI_ITEM_OFFSETS, alpha);
+            DrawInventoryIcon(armor, icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
         }
         
         // Add percent?
@@ -346,18 +342,24 @@ class fdhud : BaseStatusBar
         let key2_pos = pos + (3, 13);
         let key3_pos = pos + (3, 23);
         
-        for(int i = 0; i < 6; i++) locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
+        for(int i = 0; i < 6; i++)
+        {
+            locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
+        }
+
         // key 1
         if (locks[1] && locks[4]) image = "STKEYS6";
         else if (locks[1]) image = "STKEYS0";
         else if (locks[4]) image = "STKEYS3";
         DrawImage(image, key1_pos, DI_ITEM_OFFSETS);
+
         // key 2
         if (locks[2] && locks[5]) image = "STKEYS7";
         else if (locks[2]) image = "STKEYS1";
         else if (locks[5]) image = "STKEYS4";
         else image = "";
         DrawImage(image, key2_pos, DI_ITEM_OFFSETS);
+
         // key 3
         if (locks[0] && locks[3]) image = "STKEYS8";
         else if (locks[0]) image = "STKEYS2";
@@ -433,16 +435,6 @@ class fdhud : BaseStatusBar
         }
     }
 
-    
-    // Returns a value used for adjusting sprites, if the sprite has an offset that makes it not centered
-    Vector2 GetTextureOffsetCorrection(TextureID TexID)
-    {
-        let offset = TexMan.GetScaledOffset(TexID);
-        let size = TexMan.GetScaledSize(TexID);
-        
-        // Compare the offset with the bottom center of the sprite, and return the difference
-        return (offset.X - int(size.X / 2), offset.Y - size.Y);
-    }
     
     // Returns the length of the given value, used for FormatNumber
     int GetFormatAmount(int value)
