@@ -98,33 +98,40 @@ class FDHud : BaseStatusBar
     {
         Super.Tick();
         
-        Inventory ammotype1, ammotype2;
-        [ammotype1, ammotype2] = GetCurrentAmmo();
+        Inventory ammoType1, ammoType2;
+        [ammoType1, ammoType2] = GetCurrentAmmo();
 
-        if (ammotype1 != null) { mAmmoInterpolator.Update(ammotype1.Amount); }
-        if (ammotype2 != null) { mAltAmmoInterpolator.Update(ammotype2.Amount); }
+        if (ammoType1 != null)
+        {
+            mAmmoInterpolator.Update(ammoType1.Amount);
+        }
+
+        if (ammoType2 != null)
+        {
+            mAltAmmoInterpolator.Update(ammoType2.Amount);
+        }
 
         mHealthInterpolator.Update(CPlayer.health);
         mArmorInterpolator.Update(GetArmorAmount());
 
         // Ammo
-        int amt1, maxamt;
+        int amt1, maxAmt;
         
-        [amt1, maxamt] = GetAmount("Clip");
+        [amt1, maxAmt] = GetAmount("Clip");
         mClipInterpolator.Update(amt1);
-        mMaxClipInterpolator.Update(maxamt);
+        mMaxClipInterpolator.Update(maxAmt);
         
-        [amt1, maxamt] = GetAmount("Shell");
+        [amt1, maxAmt] = GetAmount("Shell");
         mShellInterpolator.Update(amt1);
-        mMaxShellInterpolator.Update(maxamt);
+        mMaxShellInterpolator.Update(maxAmt);
         
-        [amt1, maxamt] = GetAmount("RocketAmmo");
+        [amt1, maxAmt] = GetAmount("RocketAmmo");
         mRocketInterpolator.Update(amt1);
-        mMaxRocketInterpolator.Update(maxamt);
+        mMaxRocketInterpolator.Update(maxAmt);
         
-        [amt1, maxamt] = GetAmount("Cell");
+        [amt1, maxAmt] = GetAmount("Cell");
         mPlasmaInterpolator.Update(amt1);
-        mMaxPlasmaInterpolator.Update(maxamt);
+        mMaxPlasmaInterpolator.Update(maxAmt);
     }
 
     // Most of this is just copied from gzdoom.pk3
@@ -150,7 +157,7 @@ class FDHud : BaseStatusBar
         
         if (multiplayer)
         {
-            DrawImage("STFBANY", (143, 168), DI_ITEM_OFFSETS|DI_TRANSLATABLE);
+            DrawImage("STFBANY", (143, 168), DI_ITEM_OFFSETS | DI_TRANSLATABLE);
         }
         
         if (CPlayer.mo.InvSel != null && !Level.NoInventoryBar)
@@ -173,7 +180,7 @@ class FDHud : BaseStatusBar
 
     void DrawFDFullScreen()
     {
-        Vector2 fdbar_weapons_pos = (-71, -64);
+        Vector2 weaponsPos = (-71, -64);
         
         // If true, stack Armor bar on top of Health bar
         if (CVar.GetCVar("fdhud_stackarmorbar", CPlayer).GetBool())
@@ -192,7 +199,7 @@ class FDHud : BaseStatusBar
         {
             DrawFDBarCurrentAmm((-48, -32));
             DrawFDBarKeys((-61, -32));
-            fdbar_weapons_pos = ((-60, -32));
+            weaponsPos = ((-60, -32));
         }
         else
         {
@@ -204,8 +211,8 @@ class FDHud : BaseStatusBar
         // If true, hide the Arms bar
         if (!CVar.GetCVar("fdhud_hidearmsbar", CPlayer).GetBool())
         {
-            Vector2 starms_size = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
-            DrawFDBarWeapons((fdbar_weapons_pos.X - starms_size.X, -32));
+            Vector2 starmsSize = TexMan.GetScaledSize(TexMan.CheckForTexture("STARMS", TexMan.TYPE_MiscPatch));
+            DrawFDBarWeapons((weaponsPos.X - starmsSize.X, -32));
         }
 
         // Draw Inventory bar
@@ -216,7 +223,7 @@ class FDHud : BaseStatusBar
         else
         {
             // Get position
-            Vector2 boxpos = (-diparms.boxsize.X, -diparms.boxsize.Y + fdbar_weapons_pos.Y);
+            Vector2 boxpos = (-diparms.boxsize.X, -diparms.boxsize.Y + weaponsPos.Y);
             DrawFDInventory(diparms, boxpos);
         }
     }
@@ -225,45 +232,61 @@ class FDHud : BaseStatusBar
     {
         DrawImage("FDSTAMM", pos, DI_ITEM_OFFSETS);
         
-        Inventory ammotype1, ammotype2;
-        [ammotype1, ammotype2] = GetCurrentAmmo();
+        Inventory ammoType1, ammoType2;
+        [ammoType1, ammoType2] = GetCurrentAmmo();
         
-        if (ammotype1 != null) {
+        if (ammotype1 != null)
+        {
             // Get ammo type value
-            let ammotype1_value = mAmmoInterpolator.GetValue();
-            let ammotype2_value = mAltAmmoInterpolator.GetValue();
+            let ammoTypeValue1 = mAmmoInterpolator.GetValue();
+            let ammoTypeValue2 = mAltAmmoInterpolator.GetValue();
             
             // Get format_value
-            let format1_value = GetFormatAmount(ammotype1_value);
-            let format2_value = GetFormatAmount(ammotype2_value);
+            let formatValue1 = GetFormatAmount(ammoTypeValue1);
+            let formatValue2 = GetFormatAmount(ammoTypeValue2);
             
             // Draw icon
-            let ammotype = GetInventoryIcon(GetCurrentAmmo(), 0);
+            let ammoType = GetInventoryIcon(GetCurrentAmmo(), 0);
             let alpha = CVar.GetCVar("fdhud_ammoiconalpha", CPlayer).GetFloat();
             
             // Define positions
-            let icon_pos = pos + (24, 21);
-            let ammo1_pos = pos + (24, 3);
-            let ammo2_pos = pos + (46, 16);
+            let iconPos = pos + (24, 21);
+            let ammoPos1 = pos + (24, 3);
+            let ammoPos2 = pos + (46, 16);
             
-            DrawInventoryIcon(GetCurrentAmmo(), icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
+            DrawInventoryIcon(GetCurrentAmmo(), iconPos, DI_ITEM_CENTER_BOTTOM, alpha);
             
             // Format ammo
-            string ammo1_string;
-            string ammo2_string;
+            string ammoString1;
+            string ammoString2;
             
-            if (ammotype2 != null)
+            if (ammoType2 != null)
             {
-                if (CVar.GetCVar("fdhud_swapaltammo", CPlayer).GetBool()) { ammo1_string = FormatNumber(ammotype2_value, format2_value); }
-                else { ammo2_string = FormatNumber(ammotype2_value, format2_value); }
+                if (CVar.GetCVar("fdhud_swapaltammo", CPlayer).GetBool())
+                {
+                    ammoString1 = FormatNumber(ammoTypeValue2, formatValue2);
+                }
+                else
+                {
+                    ammoString2 = FormatNumber(ammoTypeValue2, formatValue2);
+                }
             }
 
-            if (ammo1_string != "") { ammo2_string = FormatNumber(ammotype1_value, format1_value); }
-            else { ammo1_string = FormatNumber(ammotype1_value, format1_value); }
+            if (ammoString1 != "")
+            {
+                ammoString2 = FormatNumber(ammoTypeValue1, formatValue1);
+            }
+            else
+            {
+                ammoString1 = FormatNumber(ammoTypeValue1, formatValue1);
+            }
             
             // Display numbers
-            DrawString(mHUDFont, ammo1_string, ammo1_pos, DI_TEXT_ALIGN_CENTER | DI_NOSHADOW);
-            if (ammo2_string != "") { DrawString(mIndexFont, ammo2_string, ammo2_pos, DI_TEXT_ALIGN_RIGHT | DI_NOSHADOW); }
+            DrawString(mHUDFont, ammoString1, ammoPos1, DI_TEXT_ALIGN_CENTER | DI_NOSHADOW);
+            if (ammoString2 != "")
+            {
+                DrawString(mIndexFont, ammoString2, ammoPos2, DI_TEXT_ALIGN_RIGHT | DI_NOSHADOW);
+            }
         }
     }
 
@@ -275,7 +298,7 @@ class FDHud : BaseStatusBar
         let health = mHealthInterpolator.GetValue();
 
         // Get text_align
-        let format_value = GetFormatAmount(health);
+        let formatValue = GetFormatAmount(health);
         
         // Draw icon
         let berserk = CPlayer.mo.FindInventory("PowerStrength");
@@ -283,19 +306,19 @@ class FDHud : BaseStatusBar
         let alpha = CVar.GetCVar("fdhud_hpiconalpha", CPlayer).GetFloat();
 
         // Define positions
-        let icon_pos = pos + (29, 21);
-        let text_pos = pos + (29, 3);
+        let iconPos = pos + (29, 21);
+        let textPos = pos + (29, 3);
          
-        DrawImage(berserk? "PSTRA0" : "MEDIA0", icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
+        DrawImage(berserk? "PSTRA0" : "MEDIA0", iconPos, DI_ITEM_CENTER_BOTTOM, alpha);
         
         // Add percent to health? Also turn it into a string
         string hp;
 
-        hp = FormatNumber(health, format_value);
+        hp = FormatNumber(health, formatValue);
         if (!CVar.GetCVar("fdhud_hidepercent", CPlayer).GetBool()) { hp = String.Format("%s%%", hp); }
         
         // Draw Health value
-        DrawString(mHUDFont, hp, text_pos, DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
+        DrawString(mHUDFont, hp, textPos, DI_TEXT_ALIGN_CENTER | DI_NOSHADOW);
     }
 
     void DrawFDBarArmor(Vector2 pos)
@@ -303,10 +326,10 @@ class FDHud : BaseStatusBar
         DrawImage("FDSTARMO", pos, DI_ITEM_OFFSETS);
         
         // Get Armor value
-        let armor_value = mArmorInterpolator.GetValue();
+        let armorValue = mArmorInterpolator.GetValue();
         
         // Get format_value
-        let format_value = GetFormatAmount(armor_value);
+        let formatValue = GetFormatAmount(armorValue);
         
         // Draw icon
         let armor = CPlayer.mo.FindInventory("BasicArmor");
@@ -315,33 +338,36 @@ class FDHud : BaseStatusBar
             let alpha = CVar.GetCVar("fdhud_armoriconalpha", CPlayer).GetFloat();
             
             // Set position
-            let icon_pos = pos + (29, 21);
+            let iconPos = pos + (29, 21);
 
-            DrawInventoryIcon(armor, icon_pos, DI_ITEM_CENTER_BOTTOM, alpha);
+            DrawInventoryIcon(armor, iconPos, DI_ITEM_CENTER_BOTTOM, alpha);
         }
         
         // Add percent?
-        string armor_string = FormatNumber(armor_value, format_value);
-        if (!CVar.GetCvar("fdhud_hidepercent", CPlayer).GetBool()) { armor_string = String.Format("%s%%", armor_string); }
+        string armorString = FormatNumber(armorValue, formatValue);
+        if (!CVar.GetCvar("fdhud_hidepercent", CPlayer).GetBool())
+        {
+            armorString = String.Format("%s%%", armorString);
+        }
 
         // Set position
-        let text_pos = pos + (29, 3);
+        let textPos = pos + (29, 3);
         
-        DrawString(mHUDFont, armor_string, text_pos, DI_TEXT_ALIGN_CENTER|DI_NOSHADOW);
+        DrawString(mHUDFont, armorString, textPos, DI_TEXT_ALIGN_CENTER | DI_NOSHADOW);
     }
 
     void DrawFDBarKeys(Vector2 pos)
     {
         DrawImage("FDSTKEYS", pos, DI_ITEM_OFFSETS);
-        
+
         bool locks[6];
         String image;
-        
+
         // Set positions
-        let key1_pos = pos + (3, 3);
-        let key2_pos = pos + (3, 13);
-        let key3_pos = pos + (3, 23);
-        
+        let keyPos1 = pos + (3, 3);
+        let keyPos2 = pos + (3, 13);
+        let keyPos3 = pos + (3, 23);
+
         for(int i = 0; i < 6; i++)
         {
             locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
@@ -351,21 +377,19 @@ class FDHud : BaseStatusBar
         if (locks[1] && locks[4]) image = "STKEYS6";
         else if (locks[1]) image = "STKEYS0";
         else if (locks[4]) image = "STKEYS3";
-        DrawImage(image, key1_pos, DI_ITEM_OFFSETS);
-
+        DrawImage(image, keyPos1, DI_ITEM_OFFSETS);
         // key 2
         if (locks[2] && locks[5]) image = "STKEYS7";
         else if (locks[2]) image = "STKEYS1";
         else if (locks[5]) image = "STKEYS4";
         else image = "";
-        DrawImage(image, key2_pos, DI_ITEM_OFFSETS);
-
+        DrawImage(image, keyPos2, DI_ITEM_OFFSETS);
         // key 3
         if (locks[0] && locks[3]) image = "STKEYS8";
         else if (locks[0]) image = "STKEYS2";
         else if (locks[3]) image = "STKEYS5";
         else image = "";
-        DrawImage(image, key3_pos, DI_ITEM_OFFSETS);
+        DrawImage(image, keyPos3, DI_ITEM_OFFSETS);
     }
 
     void DrawFDBarAmmo(Vector2 pos)
@@ -377,30 +401,30 @@ class FDHud : BaseStatusBar
         let r = 65;
         
         // For convience
-        let clip_pos  = pos + (l, 5);
-        let mclip_pos = pos + (r, 5);
+        let clipPos  = pos + (l, 5);
+        let mClipPos = pos + (r, 5);
         
-        let shell_pos  = pos + (l, 11);
-        let mshell_pos = pos + (r, 11);
+        let shellPos  = pos + (l, 11);
+        let mShellPos = pos + (r, 11);
         
-        let rocket_pos  = pos + (l, 17);
-        let mrocket_pos = pos + (r, 17);
+        let rocketPos  = pos + (l, 17);
+        let mRocketPos = pos + (r, 17);
         
-        let plasma_pos  = pos + (l, 23);
-        let mplasma_pos = pos + (r, 23);
+        let plasmaPos  = pos + (l, 23);
+        let mPlasmaPos = pos + (r, 23);
         
         
-        DrawString(mIndexFont, FormatNumber(mClipInterpolator.GetValue(), 3), clip_pos, DI_TEXT_ALIGN_RIGHT);
-        DrawString(mIndexFont, FormatNumber(mMaxClipInterpolator.GetValue(), 3), mclip_pos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mClipInterpolator.GetValue(), 3), clipPos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mMaxClipInterpolator.GetValue(), 3), mClipPos, DI_TEXT_ALIGN_RIGHT);
 
-        DrawString(mIndexFont, FormatNumber(mShellInterpolator.GetValue(), 3), shell_pos, DI_TEXT_ALIGN_RIGHT);
-        DrawString(mIndexFont, FormatNumber(mMaxShellInterpolator.GetValue(), 3), mshell_pos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mShellInterpolator.GetValue(), 3), shellPos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mMaxShellInterpolator.GetValue(), 3), mShellPos, DI_TEXT_ALIGN_RIGHT);
 
-        DrawString(mIndexFont, FormatNumber(mRocketInterpolator.GetValue(), 3), rocket_pos, DI_TEXT_ALIGN_RIGHT);
-        DrawString(mIndexFont, FormatNumber(mMaxRocketInterpolator.GetValue(), 3), mrocket_pos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mRocketInterpolator.GetValue(), 3), rocketPos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mMaxRocketInterpolator.GetValue(), 3), mRocketPos, DI_TEXT_ALIGN_RIGHT);
 
-        DrawString(mIndexFont, FormatNumber(mPlasmaInterpolator.GetValue(), 3), plasma_pos, DI_TEXT_ALIGN_RIGHT);
-        DrawString(mIndexFont, FormatNumber(mMaxPlasmaInterpolator.GetValue(), 3), mplasma_pos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mPlasmaInterpolator.GetValue(), 3), plasmaPos, DI_TEXT_ALIGN_RIGHT);
+        DrawString(mIndexFont, FormatNumber(mMaxPlasmaInterpolator.GetValue(), 3), mPlasmaPos, DI_TEXT_ALIGN_RIGHT);
     }
 
     void DrawFDBarWeapons(Vector2 pos)
@@ -424,14 +448,17 @@ class FDHud : BaseStatusBar
         {
             DrawTexture(parms.box, pos, DI_ITEM_OFFSETS, CVar.GetCVar("fdhud_inventoryalpha", CPlayer).GetFloat());
 
-            Vector2 itempos = pos + parms.boxsize / 2;
-            Vector2 textpos = pos + parms.boxsize - (1, 1 + parms.amountfont.mFont.GetHeight());
+            Vector2 itemPos = pos + parms.boxsize / 2;
+            Vector2 textPos = pos + parms.boxsize - (1, 1 + parms.amountfont.mFont.GetHeight());
 
             let item = CPlayer.mo.InvSel;
             
             // Draw Inventory icon
-            DrawInventoryIcon(item, itempos, DI_ITEM_CENTER, CVar.GetCVar("fdhud_inviconalpha", CPlayer).GetFloat());
-            if (item.Amount > 1) { DrawString(parms.amountfont, FormatNumber(item.Amount, 0, 5), textpos, DI_TEXT_ALIGN_RIGHT, parms.cr, parms.itemalpha); }
+            DrawInventoryIcon(item, itemPos, DI_ITEM_CENTER, CVar.GetCVar("fdhud_inviconalpha", CPlayer).GetFloat());
+            if (item.Amount > 1)
+            {
+                DrawString(parms.amountfont, FormatNumber(item.Amount, 0, 5), textpos, DI_TEXT_ALIGN_RIGHT, parms.cr, parms.itemalpha);
+            }
         }
     }
 
@@ -442,15 +469,17 @@ class FDHud : BaseStatusBar
         if (CVar.GetCVar("fdhud_centervalue", CPlayer).GetBool())
         {
             int length;
-            do
+            while (value >= 1 && length < 3)
             {
                 value /= 10;
                 length++;
             }
-            while (value >= 1 && length < 3);
 
             return length;
         }
-        else { return 3; }
+        else
+        {
+            return 3;
+        }
     }
 }
